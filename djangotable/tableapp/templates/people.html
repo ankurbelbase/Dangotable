@@ -1,0 +1,50 @@
+{% load django_tables2 %}
+{% load querystring from django_tables2 %}
+{% load title from django_tables2 %}
+{% load trans blocktrans from i18n %}
+<!doctype html>
+<html>
+    <head>
+      
+    </head>
+    <body>
+       <table>
+			<thead>
+				<tr>
+					{% for column in table.columns %}
+						{% if column.orderable %}
+
+					<th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header|title }}
+					</a></th>
+
+						{% else %}
+							                      <th {{ column.attrs.th.as_html }}>{{ column.header|title }}</th>
+
+						                        {% endif %}
+							                 {% endfor %}
+
+											</tr>
+										</thead>
+										<tbody>
+										   {% for row in table.page.object_list|default:table.rows %}
+										
+										   <tr class="{% cycle "odd" "even" %}">
+						                        {% for column, cell in row.items %}
+						                            <td {{ column.attrs.td.as_html }}>{{ cell }}</td>
+
+
+						                        {% endfor %}
+
+						                    </tr>
+						                  {% empty %}
+						                    {% if table.empty_text %}
+						                    <tr><td colspan="{{ table.columns|length }}">{{ table.empty_text }}</td></tr>
+						                    {% endif %}
+						                  {% endfor %}
+
+						                 
+
+										</tbody>
+									</table>
+    </body>
+</html>
